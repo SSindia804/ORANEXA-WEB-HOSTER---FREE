@@ -17,7 +17,7 @@ if (!fs.existsSync(DB_FILE)) {
 function getData() { return JSON.parse(fs.readFileSync(DB_FILE)); }
 function saveData(data) { fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2)); }
 
-// --- AI CONTENT MODERATOR (Heuristic Engine) ---
+// --- AI CONTENT MODERATOR ---
 const RESTRICTED = ['password', 'cookie', 'localStorage', 'eval(', 'db.json', 'hex(', 'login', 'signin'];
 const ADULT = ['gambling', 'bet', 'casino', 'porn', 'hack'];
 
@@ -43,7 +43,7 @@ function analyzeCode(webData) {
 
 // --- API ROUTES ---
 
-// Search Registry
+// 1. Search Registry
 app.get('/api/search', (req, res) => {
     const { q } = req.query;
     const db = getData();
@@ -54,7 +54,7 @@ app.get('/api/search', (req, res) => {
     res.json(results);
 });
 
-// Deploy Web (with AI Check)
+// 2. Deploy Web
 app.post('/api/deploy', (req, res) => {
     const { user, webData } = req.body;
     const analysis = analyzeCode(webData);
@@ -78,7 +78,7 @@ app.post('/api/deploy', (req, res) => {
     res.json({ success: true });
 });
 
-// Get User's Projects
+// 3. Get User's Projects
 app.get('/api/user-webs', (req, res) => {
     const { user } = req.query;
     const db = getData();
